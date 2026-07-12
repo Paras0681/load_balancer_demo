@@ -1,9 +1,10 @@
-from .models import Payment, Customer
+from .models import Payment, Customer, Transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from django.db import transaction
 
+# Serializing data required for Token generation
 class CustomerTokenPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -22,6 +23,7 @@ class CustomerTokenPairSerializer(TokenObtainPairSerializer):
         return data
 
 
+# Serializer for Register data
 class CustomerRegistrationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(write_only = True)
     password = serializers.CharField(write_only = True, min_length = 8)
@@ -48,15 +50,14 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
         customer = Customer.objects.create(user=user, **validated_data)
         return customer
 
-
-
+# PaymentListSerializer is used for retriving list of Payment objects
 class PaymentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['payment_id', 'amount', 'payment_status', 'created_at']
         read_only_fields = fields
 
-
+# PaymentDetailSerialzer is used to 
 class PaymentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
@@ -66,7 +67,23 @@ class PaymentDetailSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
+
 class PaymentCreateSerializer(serializers.ModelSerializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     customer_id = serializers.UUIDField()
-    payment_method = serializers.ChoiceField(Payment.PaymentStatus.choices)
+    payment_method = serializers.ChoiceField(Payment.PaymentMethod.choices)
+    class Meta:
+        model = Payment
+        fields = ['amount', 'customer_id', 'payment_method']
+
+    @transaction.atomic
+    def create(self, validated_data):
+        customer_id = validated_data.pop('customer_id')
+        customer = Customer.objects.get(customer_id=customer_id)
+        payment = Payment.objects.create(
+            customer = customer,
+            payment_status=Payment.PaymentStatus.PENDING, 
+            **validated_data
+        )
+        Transaction.objects.create(payment=payment)
+        return payment
