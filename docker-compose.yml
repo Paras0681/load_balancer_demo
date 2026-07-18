@@ -1,0 +1,50 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  backend1:
+    build: ./backend
+    environment:
+      - SERVER_ID=backend1
+    volumes:
+      - ./backend/db.sqlite3:/api/db.sqlite3
+    depends_on:
+      - redis
+
+  backend2:
+    build: ./backend
+    environment:
+      - SERVER_ID=backend2
+    volumes:
+      - ./backend/db.sqlite3:/api/db.sqlite3
+    depends_on:
+      - redis
+
+  backend3:
+    build: ./backend
+    environment:
+      - SERVER_ID=backend3
+    volumes:
+      - ./backend/db.sqlite3:/api/db.sqlite3
+    depends_on:
+      - redis
+
+  backend4:
+    build: ./backend
+    environment:
+      - SERVER_ID=backend4
+    volumes:
+      - ./backend/db.sqlite3:/api/db.sqlite3
+    depends_on:
+      - redis
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+      - backend4
