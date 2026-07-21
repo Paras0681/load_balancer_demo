@@ -1,8 +1,8 @@
 // frontend/src/App.jsx
 import { useState } from "react";
-import StatusPanel from "../components/StatusPanel";
-import StrategySelector from "../components/StrategySelector";
-import MetricsChart from "../components/MetricsChart";
+import StatusPanel from "./components/StatusPanel";
+import StrategySelector from "./components/StrategySelector";
+import MetricsChart from "./components/MetricsChart";
 
 export default function App() {
   const [strategy, setStrategyState] = useState("round_robin");

@@ -27,7 +27,7 @@ CORS(app)  # dev-only; restrict origins in production
 client = docker.from_env()
 
 STACK_CONTAINERS = ["backend1", "backend2", "backend3", "backend4", "nginx"]
-VALID_STRATEGIES = {"round_robin", "least_conn", "ip_hash"}
+VALID_STRATEGIES = {"round_robin", "least_conn", "ip_hash", "weighted_round_robin"}
 
 STRATEGIES_DIR = Path("/nginx_conf/strategies")
 ACTIVE_CONF = Path("/nginx_conf/active_upstream.conf")
@@ -39,6 +39,8 @@ def current_strategy():
     if not ACTIVE_CONF.exists():
         return "unknown"
     text = ACTIVE_CONF.read_text()
+    if "weight=" in text:
+        return "weighted_round_robin"
     if "least_conn" in text:
         return "least_conn"
     if "ip_hash" in text:

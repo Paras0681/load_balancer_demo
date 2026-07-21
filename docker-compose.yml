@@ -5,6 +5,7 @@ services:
 
   backend1:
     build: ./backend
+    container_name: backend1
     environment:
       - SERVER_ID=backend1
     volumes:
@@ -14,6 +15,7 @@ services:
 
   backend2:
     build: ./backend
+    container_name: backend2
     environment:
       - SERVER_ID=backend2
     volumes:
@@ -23,6 +25,7 @@ services:
 
   backend3:
     build: ./backend
+    container_name: backend3
     environment:
       - SERVER_ID=backend3
     volumes:
@@ -32,6 +35,7 @@ services:
 
   backend4:
     build: ./backend
+    container_name: backend4
     environment:
       - SERVER_ID=backend4
     volumes:
@@ -41,6 +45,7 @@ services:
 
   nginx:
     build: ./nginx
+    container_name: nginx
     ports:
       - "8080:80"
     depends_on:
