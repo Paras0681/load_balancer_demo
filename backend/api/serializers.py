@@ -39,7 +39,8 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ['username', 'password', 'first_name', 'last_name', 'email', 'age']
+        fields = ['customer_id', 'username', 'password', 'first_name', 'last_name', 'email', 'age']
+        read_only_fields = ['customer_id']
 
     def validate_username(self, value):
         return validate_username_unique(value)

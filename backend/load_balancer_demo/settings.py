@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_prometheus',
     'api',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -61,6 +62,7 @@ CACHES = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -146,3 +148,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SERVER_ID = os.environ.get('SERVER_ID', 'unknown')
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # your Vite dev server — adjust if different
+]

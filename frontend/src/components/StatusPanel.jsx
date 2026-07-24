@@ -71,6 +71,12 @@ export default function StatusPanel() {
           {allRunning ? "ALL SYSTEMS UP" : "PARTIAL"}
         </span>
       </div>
+      <div style={{ marginBottom: "1rem", fontSize: "0.8rem", color: "#6b7280" }}>
+        Strategy:{" "}
+        <span style={{ fontWeight: 600, color: "#374151" }}>
+          {status.strategy.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+        </span>
+      </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: "1rem" }}>
         {Object.entries(status.containers).map(([name, state]) => {
@@ -153,13 +159,6 @@ export default function StatusPanel() {
         >
           Stop
         </button>
-      </div>
-
-      <div style={{ fontSize: "0.8rem", color: "#6b7280" }}>
-        Strategy:{" "}
-        <span style={{ fontWeight: 600, color: "#374151" }}>
-          {status.strategy.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-        </span>
       </div>
     </div>
   );

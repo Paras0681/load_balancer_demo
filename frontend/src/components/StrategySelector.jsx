@@ -1,6 +1,7 @@
 // frontend/src/components/StrategySelector.jsx
 import { useState } from "react";
 import { setStrategy } from "../api";
+import StatusPanel from "./StatusPanel"
 
 const STRATEGIES = [
   { value: "round_robin", label: "Round Robin" },
@@ -23,10 +24,11 @@ export default function StrategySelector({ current, onChanged }) {
   return (
     <div style={{ padding: "1rem", border: "1px solid #e2e2e2", borderRadius: 12 }}>
       <h3 style={{ margin: "0 0 0.75rem", fontSize: "0.95rem", fontWeight: 600, color: "#374151" }}>
-        Load Balancing Strategy
+        Load Balancing Strategy & Status
       </h3>
       <div
         style={{
+          marginBottom: "1rem",
           display: "inline-flex",
           padding: 4,
           background: "#f3f4f6",
@@ -65,6 +67,7 @@ export default function StrategySelector({ current, onChanged }) {
           Switching…
         </div>
       )}
+      <StatusPanel />
     </div>
   );
 }
