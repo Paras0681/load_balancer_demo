@@ -26,7 +26,7 @@ CORS(app)  # dev-only; restrict origins in production
 
 client = docker.from_env()
 
-STACK_CONTAINERS = ["backend1", "backend2", "backend3", "backend4", "nginx"]
+STACK_CONTAINERS = ["backend1", "backend2", "backend3", "backend4"]
 VALID_STRATEGIES = {"round_robin", "least_conn", "ip_hash", "weighted_round_robin"}
 
 STRATEGIES_DIR = Path("/nginx_conf/strategies")

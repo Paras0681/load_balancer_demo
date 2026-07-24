@@ -10,12 +10,12 @@ export default function App() {
   return (
     <div style={{ maxWidth: 900, margin: "2rem auto", fontFamily: "sans-serif" }}>
       <h1>Load Balancer Control Panel</h1>
+      <div style={{ marginTop: "1rem" }}>
+        <MetricsChart />
+      </div>
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
         <StatusPanel />
         <StrategySelector current={strategy} onChanged={setStrategyState} />
-      </div>
-      <div style={{ marginTop: "1rem" }}>
-        <MetricsChart />
       </div>
     </div>
   );

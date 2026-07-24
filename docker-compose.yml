@@ -7,7 +7,7 @@ services:
     build: ./backend
     container_name: backend1
     environment:
-      - SERVER_ID=backend1
+      - SERVER_ID=B1
     volumes:
       - ./backend/db.sqlite3:/api/db.sqlite3
     depends_on:
@@ -17,7 +17,7 @@ services:
     build: ./backend
     container_name: backend2
     environment:
-      - SERVER_ID=backend2
+      - SERVER_ID=B2
     volumes:
       - ./backend/db.sqlite3:/api/db.sqlite3
     depends_on:
@@ -27,7 +27,7 @@ services:
     build: ./backend
     container_name: backend3
     environment:
-      - SERVER_ID=backend3
+      - SERVER_ID=B3
     volumes:
       - ./backend/db.sqlite3:/api/db.sqlite3
     depends_on:
@@ -37,7 +37,7 @@ services:
     build: ./backend
     container_name: backend4
     environment:
-      - SERVER_ID=backend4
+      - SERVER_ID=B4
     volumes:
       - ./backend/db.sqlite3:/api/db.sqlite3
     depends_on:
@@ -73,8 +73,3 @@ services:
     ports:
       - "9090:9090"
  
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
