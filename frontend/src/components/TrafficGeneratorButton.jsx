@@ -2,12 +2,6 @@
 import { useRef, useState } from "react";
 import { TrafficService } from "../services/trafficService";
 
-const ALGO_PRESETS = [
-  { label: "Round Robin", note: "nginx default — even split" },
-  { label: "Least Conn", note: "nginx least_conn directive" },
-  { label: "IP Hash", note: "nginx ip_hash — sticky by client" },
-];
-
 const emptyKindCounts = { list: 0, detail: 0, create: 0, provision: 0, unknown: 0 };
 
 export default function TrafficGeneratorButton() {
@@ -15,7 +9,6 @@ export default function TrafficGeneratorButton() {
   const [totalRequests, setTotalRequests] = useState(10000);
   const [thinkTimeMs, setThinkTimeMs] = useState(0);
   const [weights, setWeights] = useState({ create: 20, detail: 30, list: 50 });
-  const [algoNote, setAlgoNote] = useState(ALGO_PRESETS[0]);
 
   const [running, setRunning] = useState(false);
   const [sent, setSent] = useState(0);
@@ -62,167 +55,117 @@ export default function TrafficGeneratorButton() {
   };
 
   return (
-    <div
-      style={{
-        padding: "1.25rem",
-        border: "1px solid #e2e2e2",
-        borderRadius: 12,
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.75rem",
-      }}
-    >
-      <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600, color: "#374151" }}>
-        Simulate Payment Traffic
-      </h3>
+    <div className="card">
+      <div className="card-header">
+        <h3 className="card-title">Traffic Simulator</h3>
+        <span className={`pulse-dot ${running ? "is-live" : ""}`} />
+      </div>
 
-      <div style={{ display: "flex", gap: "0.75rem", fontSize: "0.8rem" }}>
-        <label style={{ flex: 1 }}>
-          Virtual users (concurrency)
+      <div className="fields-grid">
+        <label className="field">
+          Virtual users
           <input
+            className="input"
             type="number"
             value={virtualUsers}
             disabled={running}
             onChange={(e) => setVirtualUsers(Number(e.target.value))}
-            style={{ width: "100%", marginTop: 4, padding: "0.3rem" }}
           />
         </label>
-        <label style={{ flex: 1 }}>
+        <label className="field">
           Total requests
           <input
+            className="input"
             type="number"
             value={totalRequests}
             disabled={running}
             onChange={(e) => setTotalRequests(Number(e.target.value))}
-            style={{ width: "100%", marginTop: 4, padding: "0.3rem" }}
           />
         </label>
-        <label style={{ flex: 1 }}>
+        <label className="field">
           Think time (ms)
           <input
+            className="input"
             type="number"
             value={thinkTimeMs}
             disabled={running}
             onChange={(e) => setThinkTimeMs(Number(e.target.value))}
-            style={{ width: "100%", marginTop: 4, padding: "0.3rem" }}
           />
         </label>
       </div>
-      <p style={{ margin: 0, fontSize: "0.7rem", color: "#9ca3af" }}>
-        Think time = 0 for a raw stress burst; set it to ~200–500ms to mimic real users
-        pausing between actions instead of hammering nonstop.
+      <p className="hint">
+        Think time = 0 for a raw stress burst; set ~200–500ms to mimic real users effect.
       </p>
 
-      <div style={{ fontSize: "0.8rem" }}>
-        <div style={{ marginBottom: 4, color: "#6b7280" }}>
-          Action mix % — create / detail / list (each virtual user only ever
-          views its own payments, like a real customer would)
-        </div>
-        <div style={{ display: "flex", gap: "0.5rem" }}>
-          <input
-            type="number"
-            value={weights.create}
-            disabled={running}
-            onChange={(e) => setWeightField("create", e.target.value)}
-            style={{ width: "100%", padding: "0.3rem" }}
-          />
-          <input
-            type="number"
-            value={weights.detail}
-            disabled={running}
-            onChange={(e) => setWeightField("detail", e.target.value)}
-            style={{ width: "100%", padding: "0.3rem" }}
-          />
-          <input
-            type="number"
-            value={weights.list}
-            disabled={running}
-            onChange={(e) => setWeightField("list", e.target.value)}
-            style={{ width: "100%", padding: "0.3rem" }}
-          />
+      <div>
+        <div className="hint" style={{ textTransform: "uppercase", letterSpacing: "0.04em", fontSize: "0.72rem" }}>Action mix % — create / detail / list</div>
+        <div className="mix-row">
+          <div className="mix-item">
+            <input
+              className="input"
+              type="number"
+              value={weights.create}
+              disabled={running}
+              onChange={(e) => setWeightField("create", e.target.value)}
+            />
+            <span className="hint" style={{ fontFamily: "var(--font-mono)" }}>create</span>
+          </div>
+          <div className="mix-item">
+            <input
+              className="input"
+              type="number"
+              value={weights.detail}
+              disabled={running}
+              onChange={(e) => setWeightField("detail", e.target.value)}
+            />
+            <span className="hint" style={{ fontFamily: "var(--font-mono)" }}>detail</span>
+          </div>
+          <div className="mix-item">
+            <input
+              className="input"
+              type="number"
+              value={weights.list}
+              disabled={running}
+              onChange={(e) => setWeightField("list", e.target.value)}
+            />
+            <span className="hint" style={{ fontFamily: "var(--font-mono)" }}>list</span>
+          </div>
         </div>
       </div>
-
-      <div style={{ display: "flex", gap: "0.4rem" }}>
-        {ALGO_PRESETS.map((a) => (
-          <button
-            key={a.label}
-            onClick={() => setAlgoNote(a)}
-            disabled={running}
-            title="Reminder only — actually switch this in nginx.conf and reload"
-            style={{
-              flex: 1,
-              padding: "0.35rem",
-              fontSize: "0.75rem",
-              borderRadius: 8,
-              border: algoNote.label === a.label ? "1px solid #2563eb" : "1px solid #e2e2e2",
-              background: algoNote.label === a.label ? "#eff6ff" : "#fff",
-              color: algoNote.label === a.label ? "#2563eb" : "#374151",
-              cursor: running ? "not-allowed" : "pointer",
-            }}
-          >
-            {a.label}
-          </button>
-        ))}
-      </div>
-      <p style={{ margin: 0, fontSize: "0.7rem", color: "#9ca3af" }}>
-        {algoNote.note} — label only; the actual switch happens in nginx.conf + reload.
-      </p>
 
       <button
+        className={`btn ${running ? "btn--stop" : "btn--primary"}`}
         onClick={running ? stop : run}
-        style={{
-          padding: "0.6rem",
-          fontSize: "0.85rem",
-          fontWeight: 600,
-          borderRadius: 8,
-          border: "none",
-          background: running ? "#dc2626" : "#2563eb",
-          color: "#fff",
-          cursor: "pointer",
-        }}
       >
         {running ? "Stop" : `Simulate ${totalRequests.toLocaleString()} requests`}
       </button>
 
       {(running || sent > 0) && (
-        <div style={{ fontSize: "0.8rem", color: "#6b7280" }}>
-          <div
-            style={{
-              height: 6,
-              borderRadius: 3,
-              background: "#f3f4f6",
-              overflow: "hidden",
-              marginBottom: "0.4rem",
-            }}
-          >
+        <div className="stats">
+          <div className="progress-track">
             <div
-              style={{
-                height: "100%",
-                width: `${(sent / totalRequests) * 100}%`,
-                background: "#2563eb",
-                transition: "width 0.1s linear",
-              }}
+              className="progress-fill"
+              style={{ width: `${(sent / totalRequests) * 100}%` }}
             />
           </div>
-          <div>
-            {sent.toLocaleString()}/{totalRequests.toLocaleString()} sent · {ok} ok · {fail} failed
+          <div className="stats-row">
+            <span>{sent.toLocaleString()}/{totalRequests.toLocaleString()} sent</span>
+            <span className="stat-ok">{ok} ok</span>
+            <span className="stat-fail">{fail} failed</span>
           </div>
-          <div>
-            list {byKind.list} · create {byKind.create} · detail {byKind.detail}
-            {byKind.provision > 0 && ` · ${byKind.provision} provisioning failures`}
+          <div className="stats-row">
+            <span>list {byKind.list}</span>
+            <span>create {byKind.create}</span>
+            <span>detail {byKind.detail}</span>
+            {byKind.provision > 0 && <span className="stat-fail">{byKind.provision} provisioning failures</span>}
           </div>
           {!running && elapsedMs > 0 && (
-            <div>
-              {(elapsedMs / 1000).toFixed(1)}s total ·{" "}
-              {(sent / (elapsedMs / 1000)).toFixed(1)} req/s achieved
+            <div className="stats-row">
+              <span>{(elapsedMs / 1000).toFixed(1)}s total</span>
+              <span>{(sent / (elapsedMs / 1000)).toFixed(1)} req/s achieved</span>
             </div>
           )}
-          {firstFailure && (
-            <div style={{ color: "#dc2626", marginTop: 4, whiteSpace: "pre-wrap" }}>
-              First failure: {firstFailure}
-            </div>
-          )}
+          {firstFailure && <div className="callout-danger">First failure: {firstFailure}</div>}
         </div>
       )}
     </div>

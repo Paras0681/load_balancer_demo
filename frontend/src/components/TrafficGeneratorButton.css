@@ -1,0 +1,219 @@
+/* frontend/src/components/TrafficGeneratorButton.css */
+
+.tg-card {
+  --tg-bg: #0f1420;
+  --tg-panel: #161d2e;
+  --tg-border: #262f45;
+  --tg-text: #e6e9f2;
+  --tg-muted: #8189a1;
+  --tg-accent: #6d5bff;
+  --tg-accent-soft: #6d5bff26;
+  --tg-danger: #f0466e;
+  --tg-danger-soft: #f0466e22;
+  --tg-ok: #2fd680;
+  --tg-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  --tg-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background: var(--tg-bg);
+  border: 1px solid var(--tg-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  font-family: var(--tg-sans);
+  color: var(--tg-text);
+}
+
+.tg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tg-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tg-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tg-muted);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tg-pulse.is-live {
+  background: var(--tg-ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tg-ok) 25%, transparent);
+  animation: tg-blink 1.1s ease-in-out infinite;
+}
+
+@keyframes tg-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.tg-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.tg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--tg-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tg-input {
+  font-family: var(--tg-mono);
+  font-size: 0.85rem;
+  color: var(--tg-text);
+  background: var(--tg-panel);
+  border: 1px solid var(--tg-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tg-input:hover:not(:disabled) {
+  border-color: #37415a;
+}
+
+.tg-input:focus-visible {
+  border-color: var(--tg-accent);
+  box-shadow: 0 0 0 3px var(--tg-accent-soft);
+}
+
+.tg-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tg-hint {
+  margin: -0.4rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--tg-muted);
+}
+
+.tg-mix-label {
+  font-size: 0.72rem;
+  color: var(--tg-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.tg-mix-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tg-mix-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tg-mix-tag {
+  font-size: 0.68rem;
+  color: var(--tg-muted);
+  font-family: var(--tg-mono);
+}
+
+.tg-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--tg-sans);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.08s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tg-btn:active {
+  transform: scale(0.98);
+}
+
+.tg-btn--primary {
+  background: linear-gradient(135deg, #7c6bff, #5b47f0);
+  color: #fff;
+  box-shadow: 0 6px 20px -6px #6d5bff80;
+}
+
+.tg-btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+.tg-btn--stop {
+  background: var(--tg-danger-soft);
+  color: var(--tg-danger);
+  border: 1px solid #f0466e40;
+}
+
+.tg-btn--stop:hover {
+  background: #f0466e33;
+}
+
+.tg-progress-track {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--tg-panel);
+  overflow: hidden;
+}
+
+.tg-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7c6bff, #5b47f0);
+  transition: width 0.15s linear;
+}
+
+.tg-stats {
+  font-size: 0.78rem;
+  color: var(--tg-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.tg-stats-row {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  font-family: var(--tg-mono);
+}
+
+.tg-stat-ok { color: var(--tg-ok); }
+.tg-stat-fail { color: var(--tg-danger); }
+
+.tg-failure {
+  margin-top: 0.2rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  background: var(--tg-danger-soft);
+  border: 1px solid #f0466e33;
+  color: #ff8fa8;
+  font-family: var(--tg-mono);
+  font-size: 0.72rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
