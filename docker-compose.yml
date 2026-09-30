@@ -80,6 +80,6 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8080   # rename to REACT_APP_API_URL / NEXT_PUBLIC_API_URL to match your framework
     ports:
-      - "3000:3000"                          # change to "3000:80" if the image serves static files via nginx
+      - "3000:80"                          # change to "3000:80" if the image serves static files via nginx
     depends_on:
       - nginx

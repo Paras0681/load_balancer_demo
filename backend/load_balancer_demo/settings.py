@@ -150,5 +150,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SERVER_ID = os.environ.get('SERVER_ID', 'unknown')
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # your Vite dev server — adjust if different
+    "http://localhost:3000",  # your Vite dev server — adjust if different
 ]
